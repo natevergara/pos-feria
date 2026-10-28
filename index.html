@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>POS Feria - Terminal #01</title>
+
+<!-- PWA · 100% offline (sin CDNs, sin fuentes remotas) -->
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#000000"/>
+<meta name="color-scheme" content="dark"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="POS Feria"/>
+<meta name="format-detection" content="telephone=no"/>
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
+
+<!-- Tailwind compilado localmente (antes: cdn.tailwindcss.com) -->
+<link rel="stylesheet" href="style.css"/>
+  </head>
+<body class="bg-black text-on-surface antialiased flex flex-col justify-between w-full h-[100dvh] max-w-[430px] mx-auto overflow-hidden select-none border-x border-[#1a1a1a]">
+<!-- ========================================== -->
+<!-- TOP APPARATUS (35% VIEWPORT HEIGHT)         -->
+<!-- ========================================== -->
+<header class="h-[35dvh] flex flex-col justify-between p-3.5 bg-black border-b border-[#27272a] shrink-0">
+<!-- TopAppBar Anchor / Terminal Identity Header -->
+<div class="flex justify-between items-center w-full">
+<div class="flex items-center gap-1.5">
+<svg class="icon text-primary text-base" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M21.9,7.89l-1.05-3.37c-0.22-0.9-1-1.52-1.91-1.52H5.05c-0.9,0-1.69,0.63-1.9,1.52L2.1,7.89C1.64,9.86,2.95,11,3,11.06V19c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-7.94C22.12,9.94,22.09,8.65,21.9,7.89z M13,5h1.96l0.54,3.52C15.59,9.23,15.11,10,14.22,10C13.55,10,13,9.41,13,8.69V5z M8.49,8.52L9.04,5H11v3.69C11,9.41,10.45,10,9.71,10C8.96,10,8.41,9.3,8.49,8.52z M4.04,8.36L5.05,5h1.97L6.44,8.86C6.36,9.51,5.84,10,5.23,10C4.3,10,3.88,9.03,4.04,8.36z M19.01,19H5v-7.03c0.06,0.01,1.35,0.22,2.47-0.92c0.6,0.6,1.4,0.95,2.31,0.95c0.87,0,1.65-0.36,2.23-0.93C12.6,11.64,13.4,12,14.3,12c0.84,0,1.64-0.35,2.24-0.95c1.12,1.14,2.41,0.93,2.47,0.92V19z M18.77,10c-0.61,0-1.14-0.49-1.21-1.14L16.98,5l1.93-0.01l1.05,3.37C20.12,9.03,19.71,10,18.77,10z"/></svg>
+<span class="font-label-md text-label-md text-primary tracking-wider">TERMINAL #01</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant mx-0.5"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold" id="terminal-clock">--:--</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#111111] border border-[#27272a] font-label-sm text-label-sm text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+          LISTO
+        </span>
+<span class="font-label-sm text-label-sm font-bold text-on-surface bg-[#181818] border border-[#3f3f46] px-2 py-0.5 rounded">
+          LOCAL
+        </span>
+</div>
+</div>
+<!-- Billboard Total Cash Display (High Visibility Arm's Length Parsing) -->
+<div class="flex flex-col items-center justify-center my-auto">
+<div class="flex items-baseline gap-1.5">
+<span class="font-label-xl text-label-xl text-primary font-bold opacity-80 select-none">$</span>
+<span class="font-headline-xl text-white font-extrabold tracking-tight tabular-nums text-7xl leading-none" id="display-total">
+          0
+        </span>
+</div>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="px-2 py-0.5 rounded bg-[#181818] border border-[#27272a] font-label-sm text-label-sm text-on-surface-variant" id="items-badge">
+          0 artículos
+        </span>
+<span class="text-outline-variant font-label-sm">•</span>
+<span class="font-label-sm text-label-sm text-outline tracking-wider">MAYORISTA VENTA RÁPIDA</span>
+</div>
+</div>
+<!-- Secondary Ledger & Settlement Status Row -->
+<div class="w-full grid grid-cols-2 gap-2 bg-[#121212] border border-[#27272a] rounded-lg p-2 items-center">
+<!-- Recibido (Tendered) -->
+<div class="flex flex-col border-r border-[#27272a] pr-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Recibido</span>
+<div class="flex items-baseline gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">$</span>
+<span class="font-label-xl text-label-xl text-white font-bold tabular-nums" id="display-tendered">0</span>
+</div>
+</div>
+<!-- Vuelto / Falta (Change or Balance Due) -->
+<div class="flex flex-col pl-1" id="vuelto-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider" id="vuelto-label">Vuelto</span>
+<div class="flex items-baseline gap-1">
+<span class="font-label-sm text-label-sm text-primary font-bold" id="vuelto-currency">$</span>
+<span class="font-label-xl text-label-xl text-primary font-bold tabular-nums" id="display-change">0</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- BOTTOM APPARATUS (65% VIEWPORT HEIGHT)      -->
+<!-- ========================================== -->
+<main class="h-[65dvh] flex flex-col justify-between p-2.5 bg-black gap-2 overflow-hidden shrink-0">
+<!-- Tactile Product Grid: 2 Columns x 3 Rows (Fills Available Geometry Perfectly) -->
+<section aria-label="Catálogo Rápido" class="grid grid-cols-2 grid-rows-3 gap-2 flex-1 w-full">
+<!-- 1. Soie ($60) -->
+<button class="group relative flex flex-col justify-between p-3 rounded-lg bg-[#141414] border border-[#27272a] active:scale-95 active:bg-[#222222] transition-transform duration-75 text-left overflow-hidden" onclick="handleProductTap('Soie', 60)">
+<div class="flex justify-between items-start w-full">
+<span class="font-headline-sm text-headline-sm text-white font-bold tracking-tight">Soie</span>
+<span class="hidden font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-extrabold" id="count-Soie">0</span>
+</div>
+<div class="flex items-baseline justify-between w-full">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Prenda</span>
+<span class="font-label-xl text-label-xl text-primary font-bold tabular-nums">$60</span>
+</div>
+</button>
+<!-- 2. Venus ($60) -->
+<button class="group relative flex flex-col justify-between p-3 rounded-lg bg-[#141414] border border-[#27272a] active:scale-95 active:bg-[#222222] transition-transform duration-75 text-left overflow-hidden" onclick="handleProductTap('Venus', 60)">
+<div class="flex justify-between items-start w-full">
+<span class="font-headline-sm text-headline-sm text-white font-bold tracking-tight">Venus</span>
+<span class="hidden font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-extrabold" id="count-Venus">0</span>
+</div>
+<div class="flex items-baseline justify-between w-full">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Prenda</span>
+<span class="font-label-xl text-label-xl text-primary font-bold tabular-nums">$60</span>
+</div>
+</button>
+<!-- 3. Paris ($65) -->
+<button class="group relative flex flex-col justify-between p-3 rounded-lg bg-[#141414] border border-[#27272a] active:scale-95 active:bg-[#222222] transition-transform duration-75 text-left overflow-hidden" onclick="handleProductTap('Paris', 65)">
+<div class="flex justify-between items-start w-full">
+<span class="font-headline-sm text-headline-sm text-white font-bold tracking-tight">Paris</span>
+<span class="hidden font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-extrabold" id="count-Paris">0</span>
+</div>
+<div class="flex items-baseline justify-between w-full">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Prenda</span>
+<span class="font-label-xl text-label-xl text-primary font-bold tabular-nums">$65</span>
+</div>
+</button>
+<!-- 4. Yan ($65) -->
+<button class="group relative flex flex-col justify-between p-3 rounded-lg bg-[#141414] border border-[#27272a] active:scale-95 active:bg-[#222222] transition-transform duration-75 text-left overflow-hidden" onclick="handleProductTap('Yan', 65)">
+<div class="flex justify-between items-start w-full">
+<span class="font-headline-sm text-headline-sm text-white font-bold tracking-tight">Yan</span>
+<span class="hidden font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-extrabold" id="count-Yan">0</span>
+</div>
+<div class="flex items-baseline justify-between w-full">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Prenda</span>
+<span class="font-label-xl text-label-xl text-primary font-bold tabular-nums">$65</span>
+</div>
+</button>
+<!-- 5. Channel ($65) -->
+<button class="group relative flex flex-col justify-between p-3 rounded-lg bg-[#141414] border border-[#27272a] active:scale-95 active:bg-[#222222] transition-transform duration-75 text-left overflow-hidden" onclick="handleProductTap('Channel', 65)">
+<div class="flex justify-between items-start w-full">
+<span class="font-headline-sm text-headline-sm text-white font-bold tracking-tight">Channel</span>
+<span class="hidden font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-extrabold" id="count-Channel">0</span>
+</div>
+<div class="flex items-baseline justify-between w-full">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Prenda</span>
+<span class="font-label-xl text-label-xl text-primary font-bold tabular-nums">$65</span>
+</div>
+</button>
+<!-- 6. Moly ($75) Premium Accent Tile -->
+<button class="group relative flex flex-col justify-between p-3 rounded-lg bg-[#181818] border border-amber-subtle active:scale-95 active:bg-[#252015] transition-transform duration-75 text-left overflow-hidden" onclick="handleProductTap('Moly', 75)">
+<div class="flex justify-between items-start w-full">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-white font-bold tracking-tight">Moly</span>
+<svg class="icon text-secondary text-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><polygon points="14.43,10 12,2 9.57,10 2,10 8.18,14.41 5.83,22 12,17.31 18.18,22 15.83,14.41 22,10"/></svg>
+</div>
+<span class="hidden font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-secondary text-on-secondary font-extrabold" id="count-Moly">0</span>
+</div>
+<div class="flex items-baseline justify-between w-full">
+<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold">Premium</span>
+<span class="font-label-xl text-label-xl text-secondary font-bold tabular-nums">$75</span>
+</div>
+</button>
+</section>
+<!-- Pinned Fast Checkout Thumb Zone -->
+<footer class="flex flex-col gap-2 pt-1 pb-1 shrink-0">
+<!-- Row 1: Fast Tender Cash Shortcuts -->
+<div class="grid grid-cols-4 gap-2 w-full">
+<button class="h-11 rounded-lg bg-[#181818] border border-[#3f3f46] text-white font-label-lg text-label-lg tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleTenderTap(50)">
+          $50
+        </button>
+<button class="h-11 rounded-lg bg-[#181818] border border-[#3f3f46] text-white font-label-lg text-label-lg tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleTenderTap(100)">
+          $100
+        </button>
+<button class="h-11 rounded-lg bg-[#181818] border border-[#3f3f46] text-white font-label-lg text-label-lg tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleTenderTap(150)">
+          $150
+        </button>
+<button class="h-11 rounded-lg bg-[#181818] border border-[#3f3f46] text-white font-label-lg text-label-lg tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleTenderTap(200)">
+          $200
+        </button>
+</div>
+<!-- Row 2: Action Control Bar (Tactile Brutalist) -->
+<div class="flex items-center gap-2 w-full">
+<!-- Undo Button -->
+<button class="h-14 px-4 rounded-lg bg-[#181818] border border-[#3f3f46] text-on-surface-variant active:scale-95 active:bg-[#252525] active:text-white transition-transform duration-75 flex items-center justify-center gap-1.5 shrink-0" onclick="handleUndo()" title="Deshacer último artículo">
+<svg class="icon text-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>
+<span class="font-body-md text-body-md font-bold">Deshacer</span>
+</button>
+<!-- Nuevo Cliente / Finalizar Venta Button -->
+<button class="h-14 flex-1 rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm font-bold active:scale-95 active:bg-primary transition-transform duration-75 flex items-center justify-center gap-2 border border-primary" id="btn-complete" onclick="handleResetSale()">
+<svg class="icon text-2xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg>
+<span>Nuevo Cliente</span>
+</button>
+</div>
+</footer>
+</main>
+  <script src="app.js"></script>
+  <script>
+    /* PWA: registro del Service Worker (cache-first / modo avión) */
+    (function () {
+      if (!('serviceWorker' in navigator)) return;
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function (err) {
+          console.warn('SW no registrado:', err);
+        });
+      });
+    })();
+  </script>
+</body></html>
