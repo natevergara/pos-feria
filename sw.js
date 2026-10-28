@@ -12,7 +12,7 @@
 /* IMPORTANTE: al cambiar cualquier archivo de la app hay que subir esta
    versión (v1 → v2 → …); con cache-first estricto el navegador seguirá
    sirviendo la copia antigua hasta que cambie el nombre de la caché. */
-const CACHE_NAME = 'pos-feria-v2';
+const CACHE_NAME = 'pos-feria-v3';
 
 /* Recursos locales imprescindibles. Todos relativos: funcionan tanto en
    file:// como servidos desde un subdirectorio (scope "./"). */

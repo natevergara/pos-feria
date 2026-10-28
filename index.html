@@ -61,9 +61,15 @@
 </div>
 <!-- Secondary Ledger & Settlement Status Row -->
 <div class="w-full grid grid-cols-2 gap-2 bg-[#121212] border border-[#27272a] rounded-lg p-2 items-center">
-<!-- Recibido (Tendered) -->
-<div class="flex flex-col border-r border-[#27272a] pr-2">
+<!-- Recibido (Tendered) - Clickable to open numeric keypad -->
+<div aria-label="Tocar para anotar pago recibido" class="flex flex-col border-r border-[#27272a] pr-2 cursor-pointer rounded active:scale-95 active:bg-[#1f1f1f] transition-transform duration-75" id="recibido-container" onclick="toggleKeypad()" role="button" tabindex="0">
+<div class="flex items-center justify-between w-full">
 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Recibido</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#181818] border border-[#3f3f46] font-label-sm text-label-sm text-primary font-bold">
+<svg aria-hidden="true" class="icon text-xs" fill="currentColor" focusable="false" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+<span>ANOTAR</span>
+</span>
+</div>
 <div class="flex items-baseline gap-1">
 <span class="font-label-sm text-label-sm text-on-surface-variant">$</span>
 <span class="font-label-xl text-label-xl text-white font-bold tabular-nums" id="display-tendered">0</span>
@@ -83,8 +89,10 @@
 <!-- BOTTOM APPARATUS (65% VIEWPORT HEIGHT)      -->
 <!-- ========================================== -->
 <main class="h-[65dvh] flex flex-col justify-between p-2.5 bg-black gap-2 overflow-hidden shrink-0">
+<!-- Interactive Workspace: Product Grid + Thumb Trigger vs. Toggleable Numeric Keypad -->
+<div class="relative flex-1 flex flex-col gap-2 w-full overflow-hidden">
 <!-- Tactile Product Grid: 2 Columns x 3 Rows (Fills Available Geometry Perfectly) -->
-<section aria-label="Catálogo Rápido" class="grid grid-cols-2 grid-rows-3 gap-2 flex-1 w-full">
+<section aria-label="Catálogo Rápido" class="grid grid-cols-2 grid-rows-3 gap-2 flex-1 w-full" id="product-grid">
 <!-- 1. Soie ($60) -->
 <button class="group relative flex flex-col justify-between p-3 rounded-lg bg-[#141414] border border-[#27272a] active:scale-95 active:bg-[#222222] transition-transform duration-75 text-left overflow-hidden" onclick="handleProductTap('Soie', 60)">
 <div class="flex justify-between items-start w-full">
@@ -140,39 +148,48 @@
 <span class="font-label-xl text-label-xl text-primary font-bold tabular-nums">$65</span>
 </div>
 </button>
-<!-- 6. Moly ($75) Premium Accent Tile -->
-<button class="group relative flex flex-col justify-between p-3 rounded-lg bg-[#181818] border border-amber-subtle active:scale-95 active:bg-[#252015] transition-transform duration-75 text-left overflow-hidden" onclick="handleProductTap('Moly', 75)">
+<!-- 6. Moly ($75) -->
+<button class="group relative flex flex-col justify-between p-3 rounded-lg bg-[#141414] border border-amber-subtle active:scale-95 active:bg-[#222222] transition-transform duration-75 text-left overflow-hidden" onclick="handleProductTap('Moly', 75)">
 <div class="flex justify-between items-start w-full">
-<div class="flex items-center gap-1.5">
 <span class="font-headline-sm text-headline-sm text-white font-bold tracking-tight">Moly</span>
-<svg class="icon text-secondary text-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><polygon points="14.43,10 12,2 9.57,10 2,10 8.18,14.41 5.83,22 12,17.31 18.18,22 15.83,14.41 22,10"/></svg>
-</div>
-<span class="hidden font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-secondary text-on-secondary font-extrabold" id="count-Moly">0</span>
+<span class="hidden font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-extrabold" id="count-Moly">0</span>
 </div>
 <div class="flex items-baseline justify-between w-full">
-<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold">Premium</span>
-<span class="font-label-xl text-label-xl text-secondary font-bold tabular-nums">$75</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Prenda</span>
+<span class="font-label-xl text-label-xl text-primary font-bold tabular-nums">$75</span>
 </div>
 </button>
 </section>
-<!-- Pinned Fast Checkout Thumb Zone -->
-<footer class="flex flex-col gap-2 pt-1 pb-1 shrink-0">
-<!-- Row 1: Fast Tender Cash Shortcuts -->
-<div class="grid grid-cols-4 gap-2 w-full">
-<button class="h-11 rounded-lg bg-[#181818] border border-[#3f3f46] text-white font-label-lg text-label-lg tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleTenderTap(50)">
-          $50
-        </button>
-<button class="h-11 rounded-lg bg-[#181818] border border-[#3f3f46] text-white font-label-lg text-label-lg tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleTenderTap(100)">
-          $100
-        </button>
-<button class="h-11 rounded-lg bg-[#181818] border border-[#3f3f46] text-white font-label-lg text-label-lg tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleTenderTap(150)">
-          $150
-        </button>
-<button class="h-11 rounded-lg bg-[#181818] border border-[#3f3f46] text-white font-label-lg text-label-lg tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleTenderTap(200)">
-          $200
-        </button>
+<!-- Fast Thumb Trigger to Annotate Payment (Replaces fixed bills row) -->
+<button class="h-11 w-full rounded-lg bg-[#181818] border border-[#3f3f46] text-white font-label-lg text-label-lg active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center gap-2 shrink-0" id="btn-toggle-keypad" onclick="toggleKeypad()" type="button">
+<svg aria-hidden="true" class="icon text-primary text-lg" fill="currentColor" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8 14H7v-2h4v2zm0-4H7v-2h4v2zm0-4H7V7h4v2zm6 8h-4v-2h4v2zm0-4h-4v-2h4v2zm0-4h-4V7h4v2z"/></svg>
+<span>Anotar Pago Recibido</span>
+</button>
+<!-- Tactile Numeric Keypad Overlay (Toggleable inside bottom 65% without breaking 100dvh) -->
+<section aria-label="Teclado Numérico para Anotar Pago" class="hidden absolute inset-0 z-20 grid grid-cols-3 grid-rows-4 gap-2 bg-black w-full h-full" hidden id="keypad-container">
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(1)" type="button">1</button>
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(2)" type="button">2</button>
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(3)" type="button">3</button>
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(4)" type="button">4</button>
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(5)" type="button">5</button>
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(6)" type="button">6</button>
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(7)" type="button">7</button>
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(8)" type="button">8</button>
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(9)" type="button">9</button>
+<button class="rounded-lg bg-[#241616] border border-error-subtle text-error font-label-lg text-label-lg font-bold uppercase active:scale-95 active:bg-[#3a1d1d] transition-transform duration-75 flex items-center justify-center gap-1" onclick="handleKeypadClear()" type="button">
+<svg aria-hidden="true" class="icon text-lg" fill="currentColor" focusable="false" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+<span>Borrar</span>
+</button>
+<button class="rounded-lg bg-[#141414] border border-[#3f3f46] text-white font-headline-xl text-3xl font-extrabold tabular-nums active:scale-95 active:bg-[#2a2a2a] transition-transform duration-75 flex items-center justify-center" onclick="handleKeypadDigit(0)" type="button">0</button>
+<button class="rounded-lg bg-primary-container border border-primary text-on-primary font-label-lg text-label-lg font-extrabold uppercase active:scale-95 active:bg-primary transition-transform duration-75 flex items-center justify-center gap-1" onclick="toggleKeypad()" type="button">
+<svg aria-hidden="true" class="icon text-lg" fill="currentColor" focusable="false" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+<span>Listo</span>
+</button>
+</section>
 </div>
-<!-- Row 2: Action Control Bar (Tactile Brutalist) -->
+<!-- Pinned Fast Checkout Thumb Zone -->
+<footer class="flex flex-col pt-0.5 pb-0.5 shrink-0">
+<!-- Action Control Bar (Tactile Brutalist) -->
 <div class="flex items-center gap-2 w-full">
 <!-- Undo Button -->
 <button class="h-14 px-4 rounded-lg bg-[#181818] border border-[#3f3f46] text-on-surface-variant active:scale-95 active:bg-[#252525] active:text-white transition-transform duration-75 flex items-center justify-center gap-1.5 shrink-0" onclick="handleUndo()" title="Deshacer último artículo">

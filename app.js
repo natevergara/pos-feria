@@ -57,10 +57,10 @@ const formatMoney = (value) => {
 };
 
 /** Vibración corta y silenciosa si el dispositivo la soporta. */
-function haptic() {
+function haptic(duration = 20) {
   try {
     if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
-      navigator.vibrate(20);
+      navigator.vibrate(duration);
     }
   } catch (_) {
     /* Dispositivo/navegador sin soporte de vibración. */
@@ -109,7 +109,7 @@ function updateChangeDisplay() {
   // Sin billete: vuelto en 0, estilo neutro/primary
   if (state.tendered <= 0) {
     els.change.textContent = '0';
-    setChangeStyle('vuelto');
+    setChangeStyle('neutral');
     return;
   }
 
@@ -127,19 +127,20 @@ function updateChangeDisplay() {
 /** Aplica color y etiqueta según Vuelto / Falta. */
 function setChangeStyle(mode) {
   const isFalta = mode === 'falta';
-  const color = isFalta ? '#ffb4ab' : '#4be277'; // error / primary
+  const isNeutral = mode === 'neutral';
+  const color = isFalta ? '#ffb4ab' : (isNeutral ? '#a1a1aa' : '#4be277');
 
   if (els.changeLabel) els.changeLabel.textContent = isFalta ? 'Falta' : 'Vuelto';
 
   // Estilo del monto y del símbolo $
   if (els.change) {
     els.change.style.color = color;
-    els.change.classList.toggle('text-primary', !isFalta);
+    els.change.classList.toggle('text-primary', !isFalta && !isNeutral);
     els.change.classList.toggle('text-error', isFalta);
   }
   if (els.changeCurrency) {
     els.changeCurrency.style.color = color;
-    els.changeCurrency.classList.toggle('text-primary', !isFalta);
+    els.changeCurrency.classList.toggle('text-primary', !isFalta && !isNeutral);
     els.changeCurrency.classList.toggle('text-error', isFalta);
   }
 }
@@ -196,7 +197,13 @@ function handleProductTap(name, price) {
 function handleUndo() {
   haptic();
 
-  if (state.items.length === 0) return;
+  if (state.items.length === 0) {
+    // Sin artículos, deshacer elimina el último dígito del pago anotado.
+    state.tendered = Math.floor(state.tendered / 10);
+    state.selectedBill = 0;
+    render();
+    return;
+  }
 
   state.items.pop();
   state.total = state.items.reduce((sum, item) => sum + item.price, 0);
@@ -218,8 +225,60 @@ function handleResetSale() {
   state.total = 0;
   state.tendered = 0;
   state.selectedBill = 0;
+  setKeypadVisibility(false);
 
   render();
+}
+
+/** Anota un dígito del monto recibido (hasta seis dígitos). */
+function handleKeypadDigit(digit) {
+  const value = String(digit);
+  if (!/^\d$/.test(value)) return;
+
+  haptic(20);
+  const current = state.tendered > 0 ? String(state.tendered) : '';
+  if (current.length >= 6) return;
+
+  state.tendered = Number(current + value);
+  state.selectedBill = 0;
+  render();
+}
+
+/** Borra el último dígito del monto anotado. */
+function handleKeypadBackspace() {
+  haptic(20);
+  state.tendered = Math.floor(state.tendered / 10);
+  state.selectedBill = 0;
+  render();
+}
+
+/** Limpia el monto recibido anotado. */
+function handleKeypadClear() {
+  haptic(20);
+  state.tendered = 0;
+  state.selectedBill = 0;
+  render();
+}
+
+function getKeypadContainer() {
+  return $('keypad-container') || $('keypad-panel') || $('numeric-keypad') || $('keypad');
+}
+
+function setKeypadVisibility(visible) {
+  const keypad = getKeypadContainer();
+  if (!keypad) return;
+
+  keypad.hidden = !visible;
+  keypad.classList.toggle('hidden', !visible);
+}
+
+/** Alterna la visibilidad del teclado si la pantalla lo incluye. */
+function toggleKeypad() {
+  const keypad = getKeypadContainer();
+  if (!keypad) return;
+
+  const visible = !keypad.hidden && !keypad.classList.contains('hidden');
+  setKeypadVisibility(!visible);
 }
 
 /** Tocar billete: alterna selección y calcula vuelto/falta. */
@@ -312,3 +371,7 @@ window.handleProductTap = handleProductTap;
 window.handleTenderTap = handleTenderTap;
 window.handleUndo = handleUndo;
 window.handleResetSale = handleResetSale;
+window.handleKeypadDigit = handleKeypadDigit;
+window.handleKeypadBackspace = handleKeypadBackspace;
+window.handleKeypadClear = handleKeypadClear;
+window.toggleKeypad = toggleKeypad;
