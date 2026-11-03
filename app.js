@@ -128,7 +128,7 @@ function updateChangeDisplay() {
 function setChangeStyle(mode) {
   const isFalta = mode === 'falta';
   const isNeutral = mode === 'neutral';
-  const color = isFalta ? '#ffb4ab' : (isNeutral ? '#a1a1aa' : '#4be277');
+  const color = isFalta ? '#ff453a' : (isNeutral ? '#8e8e93' : '#30d158');
 
   if (els.changeLabel) els.changeLabel.textContent = isFalta ? 'Falta' : 'Vuelto';
 
