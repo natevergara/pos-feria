@@ -1,5 +1,5 @@
 /* ============================================================
-   CECE
+   CECE CALC
    Vanilla ES6+ · sin dependencias · estado solo en memoria
    ============================================================ */
 'use strict';
