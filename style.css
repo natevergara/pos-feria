@@ -33,3 +33,6 @@ html,body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue"
 .bar-btn{height:44px;flex-shrink:0;font-size:16px}
 .actions .key{height:60px;padding:0 20px}
 .actions .grow{flex:1}
+.total-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.pieces{flex-shrink:0;padding-bottom:10px;font-size:16px;color:var(--muted);font-variant-numeric:tabular-nums}
+.key-product.active{box-shadow:inset 0 0 0 2px var(--accent)}

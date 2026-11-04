@@ -81,16 +81,18 @@ function updateProductCounts() {
   for (const [name, count] of counts) {
     const badge = $('count-' + name);
     if (!badge) continue;
-    badge.textContent = String(count);
+    badge.textContent = 'x' + count;
     badge.classList.toggle('hidden', count <= 0);
+    if (badge.parentElement) badge.parentElement.classList.toggle('active', count > 0);
   }
 
   // Los productos sin unidades vuelven a 0 / ocultos
   document.querySelectorAll('[id^="count-"]').forEach((badge) => {
     const name = badge.id.slice('count-'.length);
     if (!counts.has(name)) {
-      badge.textContent = '0';
+      badge.textContent = 'x0';
       badge.classList.add('hidden');
+      if (badge.parentElement) badge.parentElement.classList.remove('active');
     }
   });
 }
@@ -98,7 +100,7 @@ function updateProductCounts() {
 function updateItemsBadge() {
   if (!els.itemsBadge) return;
   const count = state.items.length;
-  els.itemsBadge.textContent = count === 1 ? '1 artículo' : count + ' artículos';
+  els.itemsBadge.textContent = count === 1 ? '1 prenda' : count + ' prendas';
 }
 
 function updateChangeDisplay() {
