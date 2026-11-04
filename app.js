@@ -168,6 +168,20 @@ function updateBillSelection() {
   });
 }
 
+/** Reduce el tamaño del total solo si no cabe en el ancho disponible. */
+function fitTotal() {
+  const num = els.total;
+  const box = $('total-box');
+  if (!num || !box || !box.parentElement) return;
+  num.style.fontSize = '';
+  let size = parseFloat(getComputedStyle(num).fontSize);
+  const max = box.parentElement.clientWidth;
+  while (box.getBoundingClientRect().width > max && size > 48) {
+    size -= 4;
+    num.style.fontSize = size + 'px';
+  }
+}
+
 function render() {
   if (els.total) els.total.textContent = formatMoney(state.total);
   if (els.tendered) els.tendered.textContent = formatMoney(state.tendered);
@@ -176,6 +190,7 @@ function render() {
   updateProductCounts();
   updateChangeDisplay();
   updateBillSelection();
+  fitTotal();
 }
 
 /* ------------------------------------------------------------
