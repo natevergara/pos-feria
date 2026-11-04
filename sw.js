@@ -12,7 +12,7 @@
 /* IMPORTANTE: al cambiar cualquier archivo de la app hay que subir esta
    versión (v1 → v2 → …); con cache-first estricto el navegador seguirá
    sirviendo la copia antigua hasta que cambie el nombre de la caché. */
-const CACHE_NAME = 'pos-feria-v7';
+const CACHE_NAME = 'pos-feria-v8';
 
 /* Recursos locales imprescindibles. Todos relativos: funcionan tanto en
    file:// como servidos desde un subdirectorio (scope "./"). */
@@ -22,8 +22,8 @@ const APP_SHELL = [
   './app.js',
   './style.css',
   './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
+  './icons/cece-192.png',
+  './icons/cece-512.png',
 ];
 
 /* ------------------------------------------------------------
