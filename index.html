@@ -22,19 +22,12 @@
   </head>
 <body>
 <div class="app">
-<!-- Display: total grande a la derecha, como una calculadora -->
+<!-- Encabezado compacto: prendas + total -->
 <header class="display">
+<div class="total-row">
+<span class="pieces" id="items-badge">0 prendas</span>
 <div class="total">
 <span class="total-cur">$</span><span class="total-num" id="display-total">0</span>
-</div>
-<div class="sub">
-<div aria-label="Tocar para anotar pago recibido" class="sub-cell sub-tap" id="recibido-container" onclick="toggleKeypad()" role="button" tabindex="0">
-<span class="sub-lbl">Recibido</span>
-<span class="sub-val"><span class="sub-cur">$</span><span id="display-tendered">0</span></span>
-</div>
-<div class="sub-cell" id="vuelto-container">
-<span class="sub-lbl" id="vuelto-label">Vuelto</span>
-<span class="sub-val"><span class="sub-cur" id="vuelto-currency">$</span><span id="display-change">0</span></span>
 </div>
 </div>
 </header>
@@ -74,7 +67,6 @@
 </button>
 </section>
 
-<button class="key key-fn bar-btn" id="btn-toggle-keypad" onclick="toggleKeypad()">Recibido</button>
 
 <!-- Teclado numérico (superpuesto) -->
 <section aria-label="Teclado Numérico para Anotar Pago" class="keypad" hidden id="keypad-container">
@@ -92,6 +84,17 @@
 <button class="key key-accent" onclick="toggleKeypad()">Listo</button>
 </section>
 </div>
+
+<section class="settle" aria-label="Pago y vuelto">
+<div aria-label="Tocar para anotar pago recibido" class="settle-cell settle-tap" id="recibido-container" onclick="toggleKeypad()" role="button" tabindex="0">
+<span class="settle-lbl">Recibido</span>
+<span class="settle-val"><span class="settle-cur">$</span><span id="display-tendered">0</span></span>
+</div>
+<div class="settle-cell" id="vuelto-container">
+<span class="settle-lbl" id="vuelto-label">Vuelto</span>
+<span class="settle-val"><span class="settle-cur" id="vuelto-currency">$</span><span id="display-change">0</span></span>
+</div>
+</section>
 
 <footer class="actions">
 <button class="key key-fn" onclick="handleUndo()" title="Deshacer último artículo">Deshacer</button>
