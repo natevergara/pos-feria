@@ -1,5 +1,5 @@
 /* ============================================================
-   POS FERIA — Terminal #01
+   CECE CALC
    Vanilla ES6+ · sin dependencias · estado solo en memoria
    ============================================================ */
 'use strict';

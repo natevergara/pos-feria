@@ -1,5 +1,5 @@
 /* ============================================================
-   POS FERIA — Service Worker
+   CECE CALC — Service Worker
    Estrategia: CACHE-FIRST ESTRICTA (100% offline / modo avión)
    ------------------------------------------------------------
    - install  : precarga todos los recursos locales de la app.
@@ -12,7 +12,7 @@
 /* IMPORTANTE: al cambiar cualquier archivo de la app hay que subir esta
    versión (v1 → v2 → …); con cache-first estricto el navegador seguirá
    sirviendo la copia antigua hasta que cambie el nombre de la caché. */
-const CACHE_NAME = 'pos-feria-v4';
+const CACHE_NAME = 'pos-feria-v7';
 
 /* Recursos locales imprescindibles. Todos relativos: funcionan tanto en
    file:// como servidos desde un subdirectorio (scope "./"). */
@@ -91,7 +91,7 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     (async () => {
       if (url.origin !== self.location.origin || request.method !== 'GET') {
-        return new Response('Solicitud bloqueada: POS Feria funciona sin red.', {
+        return new Response('Solicitud bloqueada: Cece Calc funciona sin red.', {
           status: 503,
           statusText: 'Offline',
           headers: { 'Content-Type': 'text/plain; charset=utf-8' },

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
-<title>POS Feria</title>
+<title>Cece Calc</title>
 
 <!-- PWA · 100% offline (sin CDNs, sin fuentes remotas) -->
 <link rel="manifest" href="manifest.json"/>
@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-<meta name="apple-mobile-web-app-title" content="POS Feria"/>
+<meta name="apple-mobile-web-app-title" content="Cece Calc"/>
 <meta name="format-detection" content="telephone=no"/>
 <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png"/>
 <link rel="apple-touch-icon" href="icons/icon-192.png"/>
@@ -62,10 +62,10 @@
 <span class="name">Yan</span>
 <span class="price">$65</span>
 </button>
-<button class="key key-product" onclick="handleProductTap('Channel', 65)">
+<button class="key key-product" onclick="handleProductTap('Channel', 60)">
 <span class="count hidden" id="count-Channel">0</span>
 <span class="name">Channel</span>
-<span class="price">$65</span>
+<span class="price">$60</span>
 </button>
 <button class="key key-product" onclick="handleProductTap('Moly', 75)">
 <span class="count hidden" id="count-Moly">0</span>
@@ -74,7 +74,7 @@
 </button>
 </section>
 
-<button class="key key-fn bar-btn" id="btn-toggle-keypad" onclick="toggleKeypad()">Anotar pago recibido</button>
+<button class="key key-fn bar-btn" id="btn-toggle-keypad" onclick="toggleKeypad()">Recibido</button>
 
 <!-- Teclado numérico (superpuesto) -->
 <section aria-label="Teclado Numérico para Anotar Pago" class="keypad" hidden id="keypad-container">

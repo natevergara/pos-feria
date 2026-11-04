@@ -1,7 +1,7 @@
 {
-  "name": "POS Feria",
-  "short_name": "POS Feria",
-  "description": "Terminal de venta rápida para feria: 100% offline, modo avión.",
+  "name": "Cece Calc",
+  "short_name": "Cece Calc",
+  "description": "Calculadora de ventas para la feria. Funciona sin internet.",
   "lang": "es",
   "dir": "ltr",
   "start_url": "./index.html",
